@@ -68,13 +68,21 @@ public class weatherDataGetter extends MyUI {
 	}
 	
 	public static void updateCurrentWeather(String city) {
-		String nskLocationKey = "294459";
-		String mskLocationKey = "294021";
-		String spbLocationKey = "295212";
+		JSONObject json = null;
+		int cityKey = getCityKey(city);
+		if (cityKey != 0) {
+			String weatherURL = "http://apidev.accuweather.com/currentconditions/v1/" + String.valueOf(cityKey) + ".json?language=en&apikey=hoArfRosT1215";
+			try {
+				json = readJsonFromUrl(weatherURL);
+			} catch (JSONException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("JSON exception!");
+			}
+			System.out.println(json.toString());
+		setTodayTemp(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value").toString());			
+		}
 				
-		String curTemp = new String("");
-		
-		
 	}
 
 }

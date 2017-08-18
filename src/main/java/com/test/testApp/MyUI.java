@@ -40,7 +40,7 @@ public class MyUI extends UI {
 	private VerticalLayout weatherLayout = new VerticalLayout();
 	private VerticalLayout currencyLayout = new VerticalLayout();
 	private VerticalLayout visitsLyout = new VerticalLayout();
-	HashMap<Integer, String> citiesMap = new HashMap<>();
+	private static HashMap<String, Integer> citiesMap = new HashMap<>();
 	
 	
 	private static Label currentWeatherText = new Label("Now: ");    	
@@ -95,31 +95,39 @@ public class MyUI extends UI {
     }
     
     void constructWeatherLayout() {
+    	/*
     	citiesMap.put(294459, "Novosibirsk");
     	citiesMap.put(294021, "Moscow");
     	citiesMap.put(295212, "S Petersburg");
+    	*/
+    	citiesMap.put("Novosibirsk", 294459);
+    	citiesMap.put("Moscow", 294021);
+    	citiesMap.put("S Petersburg", 295212);
+
     	
     	ComboBox<String> cityChoose = new ComboBox<>("Choose city");    	
-    	cityChoose.setItems(citiesMap.values());
+    	cityChoose.setItems(citiesMap.keySet());
     	//cityChoose.setItemCaptionGenerator(cap -> citiesMap.values());
     	//cityChoose.setReadOnly(true);
     	cityChoose.setTextInputAllowed(true);
-    	cityChoose.setValue(citiesMap.get(294459));
+    	cityChoose.setValue("Novosibirsk");
     	cityChoose.setEmptySelectionAllowed(false);
     	
     	Label layoutTitle = new Label("Weather");
     	Button updateBtn = new Button("Update");
     	
     	updateBtn.addClickListener(clickEvent -> {
-    		Notification notify = new Notification("Updating Weather Data");
+    		Notification notify = new Notification("Updating weather for " + cityChoose.getValue());
     		    		
-    		weatherDataGetter.doRequest();
+    		//weatherDataGetter.doRequest();
+    		weatherDataGetter.updateCurrentWeather(cityChoose.getValue());
     		
     		notify.setDelayMsec(1000);
     		notify.setPosition(Position.BOTTOM_RIGHT);
     		notify.show(Page.getCurrent());
+    		cityChoose.getSelectedItem();
     		
-    		System.out.println("Update weather pressed!!");
+    		System.out.println("Updating weather for " + cityChoose.getValue());
     		
     		    		
     	});
@@ -151,6 +159,13 @@ public class MyUI extends UI {
 		MyUI.todayTemp = todayTemp;
 		currentWeatherText.setValue("Now: " + todayTemp + " °C");
 		
+	}
+	
+	public static int getCityKey(String city) {
+		int cityKey = 0;
+		cityKey = citiesMap.get(city);
+		
+		return cityKey;
 	}
 
 
