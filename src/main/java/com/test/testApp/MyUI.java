@@ -40,11 +40,15 @@ public class MyUI extends UI {
 	private VerticalLayout weatherLayout = new VerticalLayout();
 	private VerticalLayout currencyLayout = new VerticalLayout();
 	private VerticalLayout visitsLyout = new VerticalLayout();
-	private static HashMap<String, Integer> citiesMap = new HashMap<>();
+	private static HashMap<String, String> citiesMap = new HashMap<>();
 	
 	
 	private static Label currentWeatherText = new Label("Now: ");    	
 	private static Label tommorowWeatherText = new Label("Tommorow: ");
+	
+	private static Label usdText = new Label("$:");
+	private static Label eurText = new Label("€:");
+
 	
 	
 	
@@ -100,9 +104,9 @@ public class MyUI extends UI {
     	citiesMap.put(294021, "Moscow");
     	citiesMap.put(295212, "S Petersburg");
     	*/
-    	citiesMap.put("Novosibirsk", 294459);
-    	citiesMap.put("Moscow", 294021);
-    	citiesMap.put("S Petersburg", 295212);
+    	citiesMap.put("Novosibirsk", "Novosibirsk");
+    	citiesMap.put("Moscow", "Moscow");
+    	citiesMap.put("S Petersburg", "Saint-Petersburg");
 
     	
     	ComboBox<String> cityChoose = new ComboBox<>("Choose city");    	
@@ -120,28 +124,38 @@ public class MyUI extends UI {
     		Notification notify = new Notification("Updating weather for " + cityChoose.getValue());
     		    		
     		//weatherDataGetter.doRequest();
-    		weatherDataGetter.updateCurrentWeather(cityChoose.getValue());
     		
     		notify.setDelayMsec(1000);
     		notify.setPosition(Position.BOTTOM_RIGHT);
     		notify.show(Page.getCurrent());
     		cityChoose.getSelectedItem();
+    		weatherDataGetter.updateCurrentWeather(cityChoose.getValue());
     		
     		System.out.println("Updating weather for " + cityChoose.getValue());
     		
     		    		
     	});
     	   	
-    	weatherLayout.addComponents(layoutTitle, cityChoose,currentWeatherText, tommorowWeatherText, updateBtn);    	
+    	weatherLayout.addComponents(layoutTitle, cityChoose,currentWeatherText, tommorowWeatherText, updateBtn);  
+    	updateBtn.click();
     }
     
     void constructCurrencyLayout() {
     	Label layoutTitle = new Label("Currency");
-    	Label usdText = new Label("USD:");
-    	Label eurText = new Label("EUR:");
     	Button updateBtn = new Button("Update");
     	
+    	updateBtn.addClickListener(clickEvent -> {
+    		Notification notify = new Notification("Updating currency data");
+    		notify.setDelayMsec(1000);
+    		notify.setPosition(Position.BOTTOM_RIGHT);
+    		notify.show(Page.getCurrent());
+    		
+    		weatherDataGetter.updateCurrencyData();
+    		
+    	});
+    	
     	currencyLayout.addComponents(layoutTitle,usdText,eurText,updateBtn);
+    	updateBtn.click();
     	
     }
     
@@ -154,16 +168,20 @@ public class MyUI extends UI {
     }
     
     
-
 	public static void setTodayTemp(String todayTemp) {
 		MyUI.todayTemp = todayTemp;
-		currentWeatherText.setValue("Now: " + todayTemp + " °C");
-		
+		currentWeatherText.setValue("Now: " + todayTemp + " °C");	
 	}
 	
-	public static int getCityKey(String city) {
-		int cityKey = 0;
-		cityKey = citiesMap.get(city);
+	public static void setCurrencyData(String usdData, String usdDelta, String eurData, String eurDelta) {
+		usdText.setValue("$: " + usdData + " ( " + usdDelta + " )");
+		eurText.setValue("€: " + eurData + " ( " + eurDelta + " )");
+	}
+	
+	
+	public static String getCityKey(String city) {
+		//int cityKey = 0;
+		String cityKey = citiesMap.get(city);
 		
 		return cityKey;
 	}
