@@ -9,6 +9,10 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 
 import com.test.testApp.MyUI;
 import com.vaadin.data.converter.StringToFloatConverter;
@@ -64,7 +68,7 @@ public class weatherDataGetter extends MyUI {
 		System.out.println(json.toString());
 		
 	    
-		setTodayTemp(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value").toString());
+		//setTodayTemp(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value").toString());
 		
 		System.out.println(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value"));
 		
@@ -78,6 +82,8 @@ public class weatherDataGetter extends MyUI {
 		//String weatherTodayURL = "http://api.apixu.com/v1/current.json?key="+apiKey+"&q=" + cityKey;
 		//String weatherTommorowURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q=" + cityKey;
 		String weatherForecastURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q="+cityKey+"&days=2";
+		String tommorowTemp = "";
+		
 		if (cityKey != null) {
 			//String weatherURL = "http://apidev.accuweather.com/currentconditions/v1/" + String.valueOf(cityKey) + ".json?language=en&apikey=hoArfRosT1215";
 			//String weatherForTommorowURL = "http://api.accuweather.com/forecasts/v1/daily/1day/335315?apikey=apiKey";
@@ -89,7 +95,25 @@ public class weatherDataGetter extends MyUI {
 				System.out.println("JSON exception!");
 			}
 			System.out.println(json.toString());
-		setTodayTemp(json.getJSONObject("current").get("temp_c").toString());			
+			
+		//System.out.println(json.getJSONObject("forecast").getJSONObject("forecastday").get("maxtemp_c").toString());
+	    //System.out.println(json.getJSONObject("forecast").getJSONArray("forecastday").toString());
+		JSONArray weatherArray = json.getJSONObject("forecast").getJSONArray("forecastday");
+		//String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+		
+		String timeStamp = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+		System.out.println(timeStamp);
+		
+		for (Object weatherDay : weatherArray) {
+			JSONObject jsDay= (JSONObject) weatherDay;			
+			if (jsDay.get("date").toString().equals(timeStamp)) {
+				//System.out.println("--- We found it!!!!");
+				tommorowTemp = jsDay.getJSONObject("day").get("maxtemp_c").toString();
+				
+			}
+		}
+		
+		setTodayTemp(json.getJSONObject("current").get("temp_c").toString(),tommorowTemp);			
 		}
 				
 	}

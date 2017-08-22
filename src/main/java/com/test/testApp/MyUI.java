@@ -117,9 +117,13 @@ public class MyUI extends UI {
     	cityChoose.setValue("Novosibirsk");
     	cityChoose.setEmptySelectionAllowed(false);
     	
+    	
     	Label layoutTitle = new Label("Weather");
     	Button updateBtn = new Button("Update");
     	
+    	cityChoose.addSelectionListener(changeListener -> {
+    		updateBtn.click();
+    	});
     	updateBtn.addClickListener(clickEvent -> {
     		Notification notify = new Notification("Updating weather for " + cityChoose.getValue());
     		    		
@@ -168,9 +172,10 @@ public class MyUI extends UI {
     }
     
     
-	public static void setTodayTemp(String todayTemp) {
+	public static void setTodayTemp(String todayTemp, String tommorowTemp) {
 		MyUI.todayTemp = todayTemp;
 		currentWeatherText.setValue("Now: " + todayTemp + " °C");	
+		tommorowWeatherText.setValue("Tommorow: " + tommorowTemp + " °C");
 	}
 	
 	public static void setCurrencyData(String usdData, String usdDelta, String eurData, String eurDelta) {
