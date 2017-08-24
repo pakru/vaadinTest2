@@ -12,25 +12,24 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
-
-import com.test.testApp.MyUI;
-import com.vaadin.data.converter.StringToFloatConverter;
 
 import org.json.*;
 
 
-public class weatherDataGetter extends MyUI {  	
-	private static String readAll(Reader rd) throws IOException {
-		    StringBuilder sb = new StringBuilder();
-		    int cp;
-		    while ((cp = rd.read()) != -1) {
-		      sb.append((char) cp);
-		    }
-		    return sb.toString();
-		  }
-
-	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+public class DataUpdater  {	
+	
+	private String readAll(Reader rd) throws IOException {
+	    StringBuilder sb = new StringBuilder();
+	    int cp;
+	    while ((cp = rd.read()) != -1) {
+	      sb.append((char) cp);
+	    }
+	    return sb.toString();
+	  }
+	
+	private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 		JSONObject json = null;
 		    InputStream inStream = new URL(url).openStream();
 		    try {
@@ -54,35 +53,17 @@ public class weatherDataGetter extends MyUI {
 		    }
 		  return json;
 		  }
-	
-	public static void doRequest() {
+
+	public WeatherData getCurrentWeather(String cityKey) {
 		JSONObject json = null;
-		try {
-			json = readJsonFromUrl(
-					"http://apidev.accuweather.com/currentconditions/v1/294459.json?language=en&apikey=hoArfRosT1215");
-		} catch (JSONException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("JSON exception!");
-		}
-		System.out.println(json.toString());
-		
-	    
-		//setTodayTemp(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value").toString());
-		
-		System.out.println(json.getJSONObject("Temperature").getJSONObject("Metric").get("Value"));
-		
-		
-	}
-	
-	public static void updateCurrentWeather(String city) {
-		JSONObject json = null;
-		String cityKey = getCityKey(city);		
+		//String cityKey = getCityKey(city);		
+		//String cityKey = ""; //!!!!!! temp!
 		String apiKey = "a73dbed5bab3457b8c193243172108";
 		//String weatherTodayURL = "http://api.apixu.com/v1/current.json?key="+apiKey+"&q=" + cityKey;
 		//String weatherTommorowURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q=" + cityKey;
 		String weatherForecastURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q="+cityKey+"&days=2";
-		String tommorowTemp = "";
+		String tommorowTempStr = "";
+		String nowTempStr = "";
 		
 		if (cityKey != null) {
 			//String weatherURL = "http://apidev.accuweather.com/currentconditions/v1/" + String.valueOf(cityKey) + ".json?language=en&apikey=hoArfRosT1215";
@@ -94,8 +75,9 @@ public class weatherDataGetter extends MyUI {
 				e.printStackTrace();
 				System.out.println("JSON exception!");
 			}
-			System.out.println(json.toString());
-			
+		System.out.println(json.toString());
+		
+		nowTempStr = json.getJSONObject("current").get("temp_c").toString();
 		//System.out.println(json.getJSONObject("forecast").getJSONObject("forecastday").get("maxtemp_c").toString());
 	    //System.out.println(json.getJSONObject("forecast").getJSONArray("forecastday").toString());
 		JSONArray weatherArray = json.getJSONObject("forecast").getJSONArray("forecastday");
@@ -108,17 +90,18 @@ public class weatherDataGetter extends MyUI {
 			JSONObject jsDay= (JSONObject) weatherDay;			
 			if (jsDay.get("date").toString().equals(timeStamp)) {
 				//System.out.println("--- We found it!!!!");
-				tommorowTemp = jsDay.getJSONObject("day").get("maxtemp_c").toString();
+				tommorowTempStr = jsDay.getJSONObject("day").get("maxtemp_c").toString();
 				
 			}
 		}
 		
-		setTodayTemp(json.getJSONObject("current").get("temp_c").toString(),tommorowTemp);			
+		//setTodayTemp(json.getJSONObject("current").get("temp_c").toString(),tommorowTemp);			
 		}
-				
+		
+		return new WeatherData(nowTempStr, tommorowTempStr);
 	}
 	
-	public static void updateCurrencyData() {
+	public CurrencyData updateCurrencyData() {
 		JSONObject json = null;
 		String currenyURL = "https://www.cbr-xml-daily.ru/daily_json.js";
 		try {
@@ -138,11 +121,15 @@ public class weatherDataGetter extends MyUI {
 		String usdPrevious = json.getJSONObject("Valute").getJSONObject("USD").get("Previous").toString();
 		float usdDelta = Float.parseFloat(usdCurrent) - Float.parseFloat(usdPrevious); 
 		
-		DecimalFormat decFormater = new DecimalFormat("#.####");
-		decFormater.setRoundingMode(RoundingMode.CEILING);				
+		DecimalFormat decFormater = new DecimalFormat("#.####");		
+		decFormater.setRoundingMode(RoundingMode.CEILING);		
+		decFormater.setPositivePrefix("+");
 		
-		setCurrencyData(usdCurrent, decFormater.format(usdDelta), eurCurrent, decFormater.format(eurDelta));				
+		//setCurrencyData(usdCurrent, decFormater.format(usdDelta), eurCurrent, decFormater.format(eurDelta));
+		return new CurrencyData(usdCurrent, usdPrevious, eurCurrent, eurPrevious);
 		
-	}
+	} 
 
-}
+
+
+} //class

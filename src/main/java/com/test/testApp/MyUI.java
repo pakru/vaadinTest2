@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.json.JSONException;
 
-import com.test.testApp.weatherDataGetter;
+//import com.test.testApp.weatherDataGetter;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -37,10 +37,13 @@ import com.vaadin.ui.ComboBox;
  */
 @Theme("mytheme")
 public class MyUI extends UI {
+	/*
 	private VerticalLayout weatherLayout = new VerticalLayout();
 	private VerticalLayout currencyLayout = new VerticalLayout();
 	private VerticalLayout visitsLyout = new VerticalLayout();
 	private static HashMap<String, String> citiesMap = new HashMap<>();
+	private Label ipAddrText = new Label();
+
 	
 	
 	private static Label currentWeatherText = new Label("Now: ");    	
@@ -49,12 +52,9 @@ public class MyUI extends UI {
 	private static Label usdText = new Label("$:");
 	private static Label eurText = new Label("€:");
 
-	
-	
-	
-	
 	private static String todayTemp = new String();
 	private static String tommorowTemp = new String();
+	*/
 	
 
     @Override
@@ -69,42 +69,51 @@ public class MyUI extends UI {
             layout.addComponent(new Label("Thanks " + name.getValue() 
                     + ", it works!"));
         });
-
+        
+        UIConstructor ifaceWeb = new UIConstructor();
+        //ifaceWeb.constructIface(vaadinRequest);
+        setContent(ifaceWeb.constructIface(vaadinRequest));
+        //setContent(name);
+        
+        
+       // ipAddrText.setValue("Your IP: " + vaadinRequest.getRemoteAddr());
+        
         
         //layout.setSizeFull();
         //layout.setSpacing(true);             
         
         
-        layout.addComponents(name, button);
+       // layout.addComponents(name, button);
                 
-        layout.setComponentAlignment(name, Alignment.TOP_CENTER);
-        layout.setComponentAlignment(button, Alignment.TOP_CENTER);
+        //layout.setComponentAlignment(name, Alignment.TOP_CENTER);
+        //layout.setComponentAlignment(button, Alignment.TOP_CENTER);
         //layout.setComponentAlignment(button, Alignment.);
        
        //constructWeatherLayout();
        
        //setContent(weatherLayout);
-        constructUI();
+        //constructUI();
         
     }
-    
+    /*
     void constructUI() {
     	HorizontalLayout mainLayout = new HorizontalLayout();
+    	   	
     	constructWeatherLayout();
     	constructCurrencyLayout();
     	constructVisitsLayout();
-    	mainLayout.addComponents(weatherLayout,currencyLayout,visitsLyout);
+    	mainLayout.addComponents(weatherLayout,currencyLayout,visitsLyout,ipAddrText);
     	setContent(mainLayout);
     	
-    }
-    
+    } */
+    /*
     void constructWeatherLayout() {
     	/*
     	citiesMap.put(294459, "Novosibirsk");
     	citiesMap.put(294021, "Moscow");
     	citiesMap.put(295212, "S Petersburg");
     	*/
-    	citiesMap.put("Novosibirsk", "Novosibirsk");
+ /*   	citiesMap.put("Novosibirsk", "Novosibirsk");
     	citiesMap.put("Moscow", "Moscow");
     	citiesMap.put("S Petersburg", "Saint-Petersburg");
 
@@ -169,7 +178,7 @@ public class MyUI extends UI {
     	Label totalVisits = new Label("Total Visits:");
     	
     	visitsLyout.addComponents(layoutTitle,unicVisits,totalVisits);
-    }
+    } 
     
     
 	public static void setTodayTemp(String todayTemp, String tommorowTemp) {
@@ -189,7 +198,7 @@ public class MyUI extends UI {
 		String cityKey = citiesMap.get(city);
 		
 		return cityKey;
-	}
+	} */
 
 
 
