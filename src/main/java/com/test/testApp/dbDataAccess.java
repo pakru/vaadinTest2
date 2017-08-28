@@ -7,6 +7,7 @@ import org.bson.Document;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 public class dbDataAccess {
@@ -83,7 +84,7 @@ public class dbDataAccess {
 		
 		
 	}
-	
+	/*
 	public void dbAccess() {
 		
 		
@@ -115,7 +116,7 @@ public class dbDataAccess {
 		//getNextSequence("userid");
 				
 	}
-	
+	*/
 	//private void createCountersCollection
 	
 	
@@ -159,6 +160,17 @@ public class dbDataAccess {
 		obj = countersCollection.findOne(dbObjToFind);
 		
 		return obj.get("seq").toString();
+		
+	}
+	public String getUniqueVisits() {
+		//DBCollection countersCollection = dbVisitors.getCollection(countersCollectionName);
+		java.util.List sessionIDs = dbVisitors.getCollection(totalVisitorsCollection).distinct("sessionID");
+		
+		System.out.println("Unique size: " + String.valueOf(sessionIDs.size()));
+		System.out.println("SessionIDS: " + sessionIDs.toString());
+		
+		return String.valueOf(sessionIDs.size());
+		
 		
 	}
 

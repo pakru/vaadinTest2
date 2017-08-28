@@ -1,10 +1,14 @@
 package com.test.testApp;
 
+import java.util.Enumeration;
 import java.util.HashMap;
+
+import org.json.Cookie;
 
 import com.test.testApp.MyUI;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -25,31 +29,52 @@ public class UIConstructor extends MyUI {
 	private Label currentWeatherText = new Label("Now: ");    	
 	private Label tommorowWeatherText = new Label("Tommorow: ");
 	
+	private Label unicVisits = new Label("Unic Visits:");
+	private Label totalVisits = new Label("Total Visits:");
+
+	
 	private Label usdText = new Label("$:");
 	private Label eurText = new Label("€:");
 	
 	//private String todayTemp = new String();
 	//private String tommorowTemp = new String();
+	private String userIP = new String();
 	
 	private DataUpdater dataUpdater = new DataUpdater();
 	private WeatherData weatherData = null;
 	private CurrencyData currencyData = null;
+	private dbDataAccess dbVisitsCounter = new dbDataAccess();
 
 
 	
 	public Layout constructIface (VaadinRequest vdRequest) {
+		userIP = vdRequest.getRemoteAddr();
+		String sessionId = VaadinSession.getCurrent().getSession().getId();
+		
+		dbVisitsCounter.addVisitorData(userIP, sessionId);
+		
+		System.out.println("Session id: " + sessionId + " " + userIP);
+		/*
+		javax.servlet.http.Cookie[] cookies = vdRequest.getCookies();
+		
+		for (javax.servlet.http.Cookie cookie : cookies) {
+			System.out.println("Cookie: " + cookie.getName() + " : " + cookie.getValue());
+		} */
+
 		return constructUI();
 	}
 	
 	
 	private Layout constructUI() {
-	    	constructWeatherLayout();
-	    	constructCurrencyLayout();
-	    	constructVisitsLayout();
-	    	mainLayout.addComponents(weatherLayout,currencyLayout,visitsLyout,ipAddrText);
-	    	//setContent(mainLayout);
-	    	//setContent(currentWeatherText);
-	    	return mainLayout;
+		
+		ipAddrText.setValue("IP: " + userIP);		
+		constructWeatherLayout();
+	    constructCurrencyLayout();
+	    constructVisitsLayout();
+	    mainLayout.addComponents(weatherLayout,currencyLayout,visitsLyout,ipAddrText);
+	    //setContent(mainLayout);
+	    //setContent(currentWeatherText);
+	    return mainLayout;
 	    	
 	}
 	
@@ -111,8 +136,8 @@ public class UIConstructor extends MyUI {
     		notify.show(Page.getCurrent());
     		
     		currencyData = dataUpdater.updateCurrencyData();
-    		setCurrencyData(currencyData.getUsdCurrentStr(),currencyData.getUsdDeltaStr(),currencyData.getEurCurrentStr(),currencyData.getEurDeltaStr());    		
-    		
+    		setCurrencyData(currencyData.getUsdCurrentStr(),currencyData.getUsdDeltaStr(),currencyData.getEurCurrentStr(),currencyData.getEurDeltaStr());
+    		    		
     	});
     	
     	currencyLayout.addComponents(layoutTitle,usdText,eurText,updateBtn);
@@ -122,10 +147,9 @@ public class UIConstructor extends MyUI {
     
     private void constructVisitsLayout() {
     	Label layoutTitle = new Label("Visits");
-    	Label unicVisits = new Label("Unic Visits:");
-    	Label totalVisits = new Label("Total Visits:");
     	
     	visitsLyout.addComponents(layoutTitle,unicVisits,totalVisits);
+    	setVisitsData();
     }
 
     
@@ -146,6 +170,14 @@ public class UIConstructor extends MyUI {
 	public void setCurrencyData(String usdData, String usdDelta, String eurData, String eurDelta) {
 		usdText.setValue("$: " + usdData + " ( " + usdDelta + " )");
 		eurText.setValue("€: " + eurData + " ( " + eurDelta + " )");
+	}
+	
+	public void setVisitsData() {
+		String totalVisitsCount = dbVisitsCounter.getTotalVisits();
+		String uniqueVisitsCount = dbVisitsCounter.getUniqueVisits();
+		totalVisits.setValue("Total Visits: " + totalVisitsCount);
+		unicVisits.setValue("Unique visits: " + uniqueVisitsCount);
+		
 	}
 
 

@@ -59,7 +59,7 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
+        /*final VerticalLayout layout = new VerticalLayout();
         
         final TextField name = new TextField();
         name.setCaption("Type your name here:");
@@ -68,7 +68,7 @@ public class MyUI extends UI {
         button.addClickListener( e -> {
             layout.addComponent(new Label("Thanks " + name.getValue() 
                     + ", it works!"));
-        });
+        }); */
         
         UIConstructor ifaceWeb = new UIConstructor();
         //ifaceWeb.constructIface(vaadinRequest);
