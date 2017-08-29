@@ -140,7 +140,7 @@ public class dbDataAccess {
 		DBObject obj = new BasicDBObject();
 		obj = countersCollection.findAndModify(dbObjToFind, dbObjToUpdate);
 		
-		System.out.println("Collection: " + countersCollection.find().toArray().toString());
+		//System.out.println("Collection: " + countersCollection.find().toArray().toString());
 		//System.out.println("Collection: " + collection.find(dbObjToFind).toString());
 		//collection.modify
 		
@@ -166,8 +166,8 @@ public class dbDataAccess {
 		//DBCollection countersCollection = dbVisitors.getCollection(countersCollectionName);
 		java.util.List sessionIDs = dbVisitors.getCollection(totalVisitorsCollection).distinct("sessionID");
 		
-		System.out.println("Unique size: " + String.valueOf(sessionIDs.size()));
-		System.out.println("SessionIDS: " + sessionIDs.toString());
+		//System.out.println("Unique size: " + String.valueOf(sessionIDs.size()));
+		//System.out.println("SessionIDS: " + sessionIDs.toString());
 		
 		return String.valueOf(sessionIDs.size());
 		

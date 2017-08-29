@@ -36,14 +36,7 @@ public class DataUpdater  {
 		      BufferedReader readBuff = new BufferedReader(
 		    		  new InputStreamReader(inStream, Charset.forName("UTF-8")));		      
 		      String jsonText = readAll(readBuff);
-		      //System.out.println(jsonText);
-		      //jsonText = jsonText.replace("[", "");  /// remake it with regexp!!!
-		      //jsonText = jsonText.replace("]", "");
-		      //jsonText = jsonText.replaceAll("//", replacement)
-		      //System.out.println("After filter exp:");
-		      //System.out.println(jsonText);
 		      json = new JSONObject(jsonText);
-		      //return json;
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		    	System.out.println("JSON exception!");
@@ -56,48 +49,36 @@ public class DataUpdater  {
 
 	public WeatherData getCurrentWeather(String cityKey) {
 		JSONObject json = null;
-		//String cityKey = getCityKey(city);		
-		//String cityKey = ""; //!!!!!! temp!
 		String apiKey = "a73dbed5bab3457b8c193243172108";
-		//String weatherTodayURL = "http://api.apixu.com/v1/current.json?key="+apiKey+"&q=" + cityKey;
-		//String weatherTommorowURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q=" + cityKey;
 		String weatherForecastURL = "http://api.apixu.com/v1/forecast.json?key="+apiKey+"&q="+cityKey+"&days=2";
 		String tommorowTempStr = "";
 		String nowTempStr = "";
 		
 		if (cityKey != null) {
-			//String weatherURL = "http://apidev.accuweather.com/currentconditions/v1/" + String.valueOf(cityKey) + ".json?language=en&apikey=hoArfRosT1215";
-			//String weatherForTommorowURL = "http://api.accuweather.com/forecasts/v1/daily/1day/335315?apikey=apiKey";
 			try {
 				json = readJsonFromUrl(weatherForecastURL);
 			} catch (JSONException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("JSON exception!");
+				return null;
+				//System.out.println("JSON exception!");
 			}
-		System.out.println(json.toString());
-		
+			
 		nowTempStr = json.getJSONObject("current").get("temp_c").toString();
-		//System.out.println(json.getJSONObject("forecast").getJSONObject("forecastday").get("maxtemp_c").toString());
-	    //System.out.println(json.getJSONObject("forecast").getJSONArray("forecastday").toString());
 		JSONArray weatherArray = json.getJSONObject("forecast").getJSONArray("forecastday");
-		//String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 		
 		String timeStamp = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
-		System.out.println(timeStamp);
 		
 		for (Object weatherDay : weatherArray) {
 			JSONObject jsDay= (JSONObject) weatherDay;			
 			if (jsDay.get("date").toString().equals(timeStamp)) {
 				//System.out.println("--- We found it!!!!");
 				tommorowTempStr = jsDay.getJSONObject("day").get("maxtemp_c").toString();
-				
 			}
 		}
 		
-		//setTodayTemp(json.getJSONObject("current").get("temp_c").toString(),tommorowTemp);			
 		}
-		
+	
 		return new WeatherData(nowTempStr, tommorowTempStr);
 	}
 	
@@ -109,9 +90,10 @@ public class DataUpdater  {
 		} catch (JSONException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("JSON exception!");
+			return null;
+			//System.out.println("JSON exception!");
 		}
-		System.out.println(json.toString());
+		//System.out.println(json.toString());
 		
 		String eurCurrent = json.getJSONObject("Valute").getJSONObject("EUR").get("Value").toString();
 		String eurPrevious = json.getJSONObject("Valute").getJSONObject("EUR").get("Previous").toString();

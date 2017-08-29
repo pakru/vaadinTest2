@@ -7,5 +7,20 @@
 .mytheme {
   @include addons;
   @include mytheme;
+  
+  .v-label {
+  	font-size: 20px;
+  	}
+  .v-label-miniheader {
+  	font-size: 25px;
+  	width: 100%
+  	text-align: center;
+  	}
+  
+  .v-panel-caption {
+  	font-size: 18px;
+  	text-align: center;
 
+  }
+ 
 }

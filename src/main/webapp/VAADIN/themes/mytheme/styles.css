@@ -14762,3 +14762,16 @@ div.v-layout.v-horizontal.v-widget {
 	width: 19px;
 	overflow: hidden;
 }
+
+.mytheme .v-label {
+	font-size: 20px;
+}
+
+.mytheme .v-label-miniheader {
+	font-size: 25px;
+}
+
+.mytheme .v-panel-caption {
+	font-size: 18px;
+	text-align: center;
+}

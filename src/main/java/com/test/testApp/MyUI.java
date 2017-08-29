@@ -73,6 +73,7 @@ public class MyUI extends UI {
         UIConstructor ifaceWeb = new UIConstructor();
         //ifaceWeb.constructIface(vaadinRequest);
         setContent(ifaceWeb.constructIface(vaadinRequest));
+        
         //setContent(name);
         
         
@@ -202,8 +203,8 @@ public class MyUI extends UI {
 
 
 
-	@WebServlet(urlPatterns = "/*", name = "MyTestApp", asyncSupported = true)
+	@WebServlet(urlPatterns = "/*", name = "TestApp", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
-    public static class MyUIServlet extends VaadinServlet {
+    public static class TestServlet extends VaadinServlet {
     }
 }
