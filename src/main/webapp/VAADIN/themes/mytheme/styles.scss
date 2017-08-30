@@ -12,9 +12,19 @@
   	font-size: 20px;
   	}
   .v-label-miniheader {
-  	font-size: 25px;
-  	width: 100%
+  	font-size: 28px;
+  	width: 100%;
   	text-align: center;
+  	}
+  .v-label-datetime {
+  	white-space: normal;
+  }
+  
+  .layout-with-border {
+  	border-right-width: 4px;
+    border-right-color: #a0a0a0;
+    border-right-style: dotted;
+    height: 260px;
   	}
   
   .v-panel-caption {

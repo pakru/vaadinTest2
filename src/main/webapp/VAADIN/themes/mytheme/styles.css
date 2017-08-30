@@ -14768,7 +14768,20 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-label-miniheader {
-	font-size: 25px;
+	font-size: 28px;
+	width: 100%;
+	text-align: center;
+}
+
+.mytheme .v-label-datetime {
+	white-space: normal;
+}
+
+.mytheme .layout-with-border {
+	border-right-width: 4px;
+	border-right-color: #a0a0a0;
+	border-right-style: dotted;
+	height: 260px;
 }
 
 .mytheme .v-panel-caption {
